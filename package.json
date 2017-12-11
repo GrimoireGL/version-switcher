@@ -8,14 +8,15 @@
     "yargs": "^9.0.1"
   },
   "scripts": {
-    "start": "ts-node ./fusebox.ts --watch --hotModuleLoading --devServer"
+    "start": "ts-node ./fusebox.ts --watch --hotModuleLoading --devServer",
+    "build-prod": "ts-node ./fusebox.ts --production"
   },
   "main": "./public/dist/version-changer.js",
   "types": "./src/index.ts",
   "files": [
     "public/dist/version-changer.js"
   ],
-  "version": "1.0.0",
+  "version": "1.0.2",
   "author": {
     "name": "kyasbal-1994",
     "email": "i.kakeru@grimoire.gl"

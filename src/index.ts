@@ -1,5 +1,6 @@
 interface GrimoireWindow extends Window {
     GrimoireJS: any;
+    versionResolve: Promise<void>;
 }
 async function waitForDOMContentLoaded() {
     return new Promise<void>(resolve => {
@@ -31,7 +32,17 @@ function parseHash() {
         const hashes = /#(.*)/.exec(hash)[1].split("&");
         for (const oneHash of hashes) {
             const splitted = /([a-zA-Z0-9\-]+)=([a-zA-Z0-9\-\._\/]+)/.exec(oneHash);
-            result[splitted[1]] = splitted[2];
+            if (splitted) {
+                result[splitted[1]] = splitted[2];
+            }
+        }
+    }
+    const metas = document.getElementsByTagName("meta");
+    for (let i = 0; i < metas.length; i++) {
+        const meta = metas.item(i);
+        const lib = meta.getAttribute("lib");
+        if (lib && !result[lib]) {
+            result[lib] = meta.getAttribute("version");
         }
     }
     return result;
@@ -69,9 +80,11 @@ async function exec() {
     for (let i = 0; i < scripts.length; i++) {
         await rewriteScript(scripts[i], hashes[scripts[i].getAttribute("as")]);
     }
+
 }
 
 const gwin = window as GrimoireWindow;
 gwin.GrimoireJS = {
     postponeLoading: exec(),
 };
+gwin.versionResolve = gwin.GrimoireJS.postponeLoading;

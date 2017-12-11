@@ -25,10 +25,10 @@ const fuse = FuseBox.init({
 });
 
 let instruction = fuse.bundle("version-changer").target("browser").instructions(">./index.ts");
-if (config.watchMode) {
+if (config.watchMode && !config.productionMode) {
     instruction = instruction.watch();
 }
-if (config.hotModuleLoading) {
+if (config.hotModuleLoading && !config.productionMode) {
     instruction = instruction.hmr();
 }
 if (config.devServer) {
